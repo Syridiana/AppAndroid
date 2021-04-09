@@ -19,7 +19,9 @@
           <ion-label>Bienvenido</ion-label>
         </ion-item>
 
-        <ion-button @click="LogOut" expand="block" color="danger">Log Out</ion-button>
+        <ion-button @click="LogOut" expand="block" color="danger"
+          >Log Out</ion-button
+        >
       </div>
     </ion-content>
   </ion-page>
@@ -32,6 +34,7 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  toastController,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
@@ -48,23 +51,32 @@ export default defineComponent({
     IonTitle,
     IonToolbar,
   },
+  methods: {
+    async openToast() {
+      const toast = await toastController.create({
+        message: "Has cerrado sesión.",
+        duration: 2000,
+      });
+      return toast.present();
+    },
+      LogOut () {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => this.openToast())
+        .catch((err) => alert(err.message));
+    }
+  },
   setup() {
     const name = ref("");
 
     onBeforeMount(() => {
       const user = firebase.auth().currentUser;
     });
-    const LogOut = () => {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => alert("Has cerrado sesion"))
-        .catch((err) => alert(err.message));
-    };
+
     return {
       router: useRouter(),
-      LogOut,
-      name
+      name,
     };
   },
 });

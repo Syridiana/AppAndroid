@@ -42,6 +42,7 @@ import {
   IonItem,
   IonInput,
   IonButton,
+  toastController
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
@@ -60,23 +61,31 @@ export default defineComponent({
     IonLabel,
     IonItem,
     IonInput,
-    IonButton,
+    IonButton
+  },
+   methods: {
+    async openToast() {
+      const toast = await toastController.create({
+        message: "Registrado correctamente.",
+        duration: 2000,
+      });
+      return toast.present();
+    },
+    RegisterUser() {
+    
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(this.email, this.password)
+        .then(() => this.openToast())
+        .catch((err) => alert(err.message));
+    }
   },
   setup() {
     const email = ref("");
     const password = ref("");
-    
-    const RegisterUser = () => {
-    
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(email.value, password.value)
-        .then((user) => alert("Registrado correctamente"))
-        .catch((err) => alert(err.message));
-    };
+
     return {
       router: useRouter(),
-      RegisterUser,
       email,
       password,
     };
@@ -85,31 +94,19 @@ export default defineComponent({
 </script>
 
 <style scoped>
-#container {
-  text-align: center;
+ion-content {
+  /* Set the background of the entire app */
+  --ion-background-color: #eee;
 
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  /* Set the font family of the entire app */
+  --ion-text-color: #000;
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
+ion-header {
+  /* Set the background of the entire app */
+  --ion-background-color: #eee;
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
+  /* Set the font family of the entire app */
+  --ion-text-color: #000;
 }
 </style>

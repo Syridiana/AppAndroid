@@ -25,6 +25,9 @@ import './theme/variables.css';
 
 // Firebase
 import firebase from 'firebase';
+import { VueWrapper } from '@vue/test-utils';
+
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyAOrELTN0qNyoxn1oc-rZuW7gLLXbXNM1w",
